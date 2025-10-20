@@ -37,16 +37,6 @@ Dữ liệu này rất hữu ích cho các bài toán **dự báo thời tiết*
 
 ---
 
-## 🧠 Ứng dụng gợi ý trong Machine Learning
-1. **Dự đoán mức độ ô nhiễm không khí (Air Quality Prediction)**  
-   - Mục tiêu: Dự đoán các chỉ số như `air_quality_PM2.5` hoặc `us-epa-index` dựa vào các yếu tố khí tượng.
-2. **Phân loại điều kiện thời tiết (Weather Classification)**  
-   - Dự đoán `condition_text` từ dữ liệu số.
-3. **Phân cụm khí hậu toàn cầu (Global Climate Clustering)**  
-   - Nhóm các khu vực có điều kiện khí hậu tương đồng.
-
----
-
 ## 📂 Ví dụ dữ liệu
 
 | country | location_name | temperature_celsius | condition_text | humidity | air_quality_PM2.5 | air_quality_PM10 |
