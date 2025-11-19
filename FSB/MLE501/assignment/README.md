@@ -6,6 +6,38 @@ Hệ thống dự báo chất lượng không khí hoàn chỉnh cho thành ph�
 
 ---
 
+## 📁 Cấu Trúc Project
+
+```
+assignment/
+├── data/                                    # Dữ liệu thô và đã xử lý
+│   ├── hanoi_weather_history.csv           # Dữ liệu thời tiết lịch sử  
+│   ├── hanoi_air_quality_history.csv       # Dữ liệu chất lượng không khí lịch sử
+│   ├── hanoi_weather_air_quality_final.csv # Dữ liệu training đã merge và xử lý
+│   ├── hanoi_weather_history_test_data.csv      # Dữ liệu test - thời tiết
+│   ├── hanoi_air_quality_history_test_data.csv  # Dữ liệu test - chất lượng không khí  
+│   ├── hanoi_weather_air_quality_final_test_data.csv # Dữ liệu test đã merge
+│   └── samples/                            # File mẫu JSON từ API
+│
+├── notebooks/                              # Jupyter Notebooks cho từng giai đoạn
+│   ├── G3_Assignment_Data_For_Train_Processing.ipynb    # Xử lý dữ liệu training
+│   ├── G3_Assignment_Data_For_Test.ipynb               # Xử lý dữ liệu test  
+│   ├── G3_Assignment_Model_Training.ipynb              # Huấn luyện và so sánh mô hình
+│   └── G3_Assignment_PM25_Prediction_7Days.ipynb       # Dự đoán PM2.5 cho 7 ngày
+│
+├── models/                                 # Mô hình đã huấn luyện
+│   ├── best_pm25_model_original.pkl       # Mô hình tốt nhất từ dữ liệu gốc
+│   ├── best_pm25_model_scaled.pkl         # Mô hình tốt nhất từ dữ liệu đã chuẩn hóa
+│   └── pm25_scaler.pkl                    # StandardScaler để chuẩn hóa dữ liệu
+│
+├── docs/                                   # Tài liệu chi tiết và báo cáo
+│   └── G3_Assignment_Report.docx           # Báo cáo chi tiết
+│
+└── README.md                               # File này - Tổng quan toàn bộ project
+```
+
+---
+
 ## 🎯 Tổng Quan Hệ Thống
 
 ### Vấn đề cần giải quyết
@@ -45,33 +77,76 @@ Pipeline 3-stage tự động hóa hoàn toàn:
 └─────────────────────────────────────────────────────────────────────┘
                                  │
                                  ▼
+---
+
+## 🏗️ Kiến Trúc Pipeline Tổng Thể
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                         STAGE 1: DATA COLLECTION                    │
+├─────────────────────────────────────────────────────────────────────┤
+│  ┌─────────────┐    ┌──────────────┐    ┌─────────────────────────┐ │
+│  │ Weatherbit  │───▶│  Data Split  │───▶│    data/weather_*.csv   │ │
+│  │    API      │    │  by Months   │    │     (8000+ records)     │ │
+│  └─────────────┘    └──────────────┘    └─────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                       STAGE 2: MODEL TRAINING                       │
+├─────────────────────────────────────────────────────────────────────┤
+│  ┌──────────────┐    ┌─────────────────┐    ┌─────────────────────┐ │
+│  │   Feature    │───▶│   Train & Test  │───▶│  models/best_*.pkl  │ │
+│  │ Engineering  │    │   6 Algorithms  │    │   models/scaler.pkl │ │
+│  │  (time + lag)│    │ Original+Scaled │    │                     │ │
+│  └──────────────┘    └─────────────────┘    └─────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    STAGE 3: REAL-TIME PREDICTION                    │
 ├─────────────────────────────────────────────────────────────────────┤
 │  ┌──────────────┐    ┌─────────────────┐    ┌─────────────────────┐ │
 │  │ Generate     │───▶│   Load Trained  │───▶│   7-Day Forecast    │ │
 │  │ Future       │    │     Models      │    │   CSV + Charts      │ │
-│  │ Features     │    │  (Original+Scaled)  │                     │ │
+│  │ Features     │    │  (from models/) │    │                     │ │
 │  └──────────────┘    └─────────────────┘    └─────────────────────┘ │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 📁 Cấu Trúc Project
+## 🚀 Hướng Dẫn Sử Dụng
 
+### 1. Chạy Pipeline Theo Thứ Tự
+
+```bash
+# Bước 1: Thu thập và xử lý dữ liệu training
+jupyter notebook notebooks/G3_Assignment_Data_For_Train_Processing.ipynb
+
+# Bước 2: Thu thập dữ liệu test (tùy chọn)  
+jupyter notebook notebooks/G3_Assignment_Data_For_Test.ipynb
+
+# Bước 3: Huấn luyện và so sánh mô hình
+jupyter notebook notebooks/G3_Assignment_Model_Training.ipynb
+
+# Bước 4: Dự đoán PM2.5 cho 7 ngày tiếp theo
+jupyter notebook notebooks/G3_Assignment_PM25_Prediction_7Days.ipynb
 ```
-📦 PM2.5_Prediction_Pipeline/
-├── 📓 G3_Assignment_Data_Processing.ipynb      # Stage 1: Data Collection
-├── 📓 G3_Assignment_Model_Training.ipynb       # Stage 2: Model Training  
-├── 📓 G3_Assignment_PM25_Prediction_7Days.ipynb # Stage 3: Prediction
-├── 📊 weather_data_hanoi.csv                  # Raw dataset
-├── 🤖 best_pm25_model_original.pkl            # Best model (original data)
-├── 🤖 best_pm25_model_scaled.pkl              # Best model (scaled data)
-├── 🔧 pm25_scaler.pkl                         # StandardScaler object
-├── 📈 pm25_predictions_comparison_7days.csv    # 7-day forecast results
-└── 📚 README_*.md                             # Documentation
-```
+
+### 2. Đầu Vào và Đầu Ra Của Từng Stage
+
+**Stage 1 (Data Processing):**
+- Input: Weatherbit API keys
+- Output: `data/hanoi_weather_air_quality_final.csv`
+
+**Stage 2 (Model Training):**
+- Input: `data/hanoi_weather_air_quality_final.csv`
+- Output: `models/best_pm25_model_*.pkl`, `models/pm25_scaler.pkl`
+
+**Stage 3 (Prediction):**
+- Input: Models từ `models/`, `data/hanoi_weather_air_quality_final.csv`
+- Output: Dự báo 7 ngày, biểu đồ, và phân tích
 
 ---
 
@@ -524,13 +599,13 @@ pip install pandas numpy scikit-learn xgboost matplotlib seaborn requests
 ### End-to-End Execution
 ```python
 # Step 1: Data Collection (chạy 1 lần)
-jupyter notebook G3_Assignment_Data_Processing.ipynb
+jupyter notebook notebooks/G3_Assignment_Data_For_Train_Processing.ipynb
 
-# Step 2: Model Training (chạy khi có data mới)
-jupyter notebook G3_Assignment_Model_Training.ipynb
+# Step 2: Model Training (chạy khi có data mới)  
+jupyter notebook notebooks/G3_Assignment_Model_Training.ipynb
 
 # Step 3: Generate Predictions (chạy hàng ngày)
-jupyter notebook G3_Assignment_PM25_Prediction_7Days.ipynb
+jupyter notebook notebooks/G3_Assignment_PM25_Prediction_7Days.ipynb
 ```
 
 ### API Integration Example
@@ -539,12 +614,15 @@ import joblib
 import pandas as pd
 
 def predict_pm25_next_week():
-    # Load trained model
-    model = joblib.load('best_pm25_model_scaled.pkl')
-    scaler = joblib.load('pm25_scaler.pkl')
+    # Load trained model từ thư mục models/
+    model = joblib.load('models/best_pm25_model_scaled.pkl')
+    scaler = joblib.load('models/pm25_scaler.pkl')
+    
+    # Load historical data từ thư mục data/
+    df = pd.read_csv('data/hanoi_weather_air_quality_final.csv')
     
     # Generate future features
-    future_features = generate_future_features()
+    future_features = generate_future_features(df)
     
     # Scale and predict
     X_scaled = scaler.transform(future_features)
