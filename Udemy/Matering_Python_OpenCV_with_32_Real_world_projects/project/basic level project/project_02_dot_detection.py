@@ -1,0 +1,1 @@
+# White and black dots detection using OpenCV 
