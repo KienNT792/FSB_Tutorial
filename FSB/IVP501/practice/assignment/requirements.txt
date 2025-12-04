@@ -1,0 +1,14 @@
+# Requirements for Skin Processor Application
+
+# Computer Vision
+opencv-python==4.8.1.78
+mediapipe==0.10.7
+
+# GUI Framework
+PyQt5==5.15.10
+
+# Data Processing
+numpy==1.24.3
+
+# Optional: For better performance
+# opencv-contrib-python==4.8.1.78
