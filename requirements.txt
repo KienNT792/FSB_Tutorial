@@ -1,4 +1,29 @@
+# Computer Vision Libraries
 opencv-contrib-python
 mediapipe
-numpy
+
+# GUI
 PyQt5
+
+# Core Data Science & Analysis
+pandas>=1.5.0
+numpy>=1.23.0
+scipy>=1.10.0
+
+# Data Visualization
+matplotlib>=3.6.0
+seaborn>=0.12.0
+
+# Machine Learning - Core
+scikit-learn>=1.2.0
+
+# Machine Learning - Advanced Models
+xgboost>=1.7.0
+lightgbm>=3.3.0
+catboost>=1.1.0
+
+# Metrics & Evaluation
+# (included in scikit-learn)
+
+# Utilities
+joblib>=1.2.0
