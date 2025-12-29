@@ -205,3 +205,7 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+FSB/DAM501/data/notebook/output/*
+FSB/DAM501/data/notebook/catboost_info/test/events.out.tfevents
+.DS_Store
+FSB/DAM501/data/notebook/catboost_info/*
